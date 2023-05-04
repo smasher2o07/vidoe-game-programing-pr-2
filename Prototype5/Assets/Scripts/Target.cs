@@ -32,7 +32,7 @@ public class Target : MonoBehaviour
     {
         
     }
-
+/*
     private void OnMouseDown()
     {
         if (gameManager.isGameActive)
@@ -42,14 +42,31 @@ public class Target : MonoBehaviour
             gameManager.UpdateScore(pointValue);
         }
     }
+    */
 
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+        // ! is read "not" so this reads if yhe game object is 
+        // not the bad Object and the game is running than 
+        // take away a life
         if(gameObject.CompareTag("Bad") && gameManager.isGameActive)
         {
-            gameManager.GameOver();
+            //call to the update lives script in gamemanager
+            //-1 is the "argument" to the method
+            gameManager.UpdateLives(-1);
             
+        }
+    }
+
+    public void DestroyTarget()
+    {
+        //access the gamemanager and se if the game active
+        if(gameManager.isGameActive)
+        {
+            Destroy(gameObject);
+            Instantiate(explosionParticle, transform.position,explosionParticle.transform.rotation);
+            gameManager.UpdateScore(pointValue);
         }
     }
 

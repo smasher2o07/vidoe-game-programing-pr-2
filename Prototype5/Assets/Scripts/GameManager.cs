@@ -13,10 +13,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
     public GameObject titleScreen;
-    public bool isGameActive;
+    public bool isGameActive;  // bool is true or false
     public Button restartButton;
     public TextMeshProUGUI livesText;
     private int lives;
+    public GameObject pauseScreen;
+    public bool paused;
     
 
     // Start is called before the first frame update
@@ -28,7 +30,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //check if the user has pressed the P key
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            ChangePaused();
+        }
     }
 
     IEnumerator SpawnTarget()
@@ -40,9 +46,11 @@ public class GameManager : MonoBehaviour
             Instantiate(targets[index]);
         }
     }
-
+//this is a method header or method signature for UpdateScore
+//is has a parameter "scoreToAdd
     public void UpdateScore(int scoreToAdd)
     {
+        //+= is liek score = score + scoreToAdd
     score += scoreToAdd;
     scoreText.text = "Score: " + score;
     }
@@ -51,12 +59,16 @@ public class GameManager : MonoBehaviour
     {
         lives += livesToChange;
         livesText.text = "Lives;" + lives;
+        //tells us when to end the game if we are out of lives
         if (lives<= 0)
         {
+            //this is a method call, we are "calling" GameOver()
             GameOver();
         }
     }
 
+    //this is another method header/method signature
+    //that dosent have a parameter 
     public void GameOver()
     {
         restartButton.gameObject.SetActive(true);
@@ -80,5 +92,21 @@ public class GameManager : MonoBehaviour
         UpdateLives(3);
         
         titleScreen.gameObject.SetActive(false);
+    }
+
+    void ChangePaused()
+    {
+        if (!paused)
+        {
+            paused = true;
+            pauseScreen.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else
+        {
+            paused = false;
+            pauseScreen.SetActive(false);
+            Time.timeScale = 1;
+        }
     }
 }
